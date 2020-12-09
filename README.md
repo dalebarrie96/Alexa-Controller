@@ -1,2 +1,3 @@
 # Alexa Controller
  
+My 1-Year-old nephew has recently learned about the magical box in the corner of the room that plays all of his favourite songs. He has learned to walk over to our Echo and wrap his hands around it whenever he wants us to play some music for him. It's clear to us he now understands exactly what the echo does and when he wants to use it, but he lacks the communication skills to ask Alexa himself. This made me come up with the idea of designing and making a small Arduino based box with tactile buttons, which when pressed will play an Alexa command through an internal speaker.
