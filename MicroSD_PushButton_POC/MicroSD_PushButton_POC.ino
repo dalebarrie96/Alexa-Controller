@@ -3,7 +3,6 @@
 //file stuff
 int chipSelect = 8;
 File file; // file object that is used to read and write data
-int index = 1;
 
 //button stuff
 int buttonPin = 4;
