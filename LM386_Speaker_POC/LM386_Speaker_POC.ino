@@ -1,30 +1,43 @@
+#include <pcmConfig.h>
+#include <pcmRF.h>
+#include <TMRpcm.h>
+
 #include <SD.h>
+#define SD_ChipSelectPin 4
+#include <SPI.h>
+
 
 //file setup
-int chipSelect = 8;
+int chipSelect = 4;
 File file;
+
+//music setup 
+TMRpcm tmrpcm; 
 
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
   Serial.println("Arduino Speaker Test");
 
-  //Micro SD Stuff
-  pinMode(chipSelect, OUTPUT);// chip select pin must be set to OUTPUT mode
-  if (!SD.begin(chipSelect)) { // Initialize SD card
-    Serial.println("Could not initialize SD card."); // if return value is false, something went wrong.
+  //music stuff
+  tmrpcm.speakerPin = 9;
+
+  if (!SD.begin(SD_ChipSelectPin)) {
+    Serial.println("SD fail");
+    return;
   }else{
-    Serial.println("initialized SD card.");
+    Serial.println("SD Sucess");
   }
 
-  if (SD.exists("1.wav")) {
-    Serial.println("audio clip exists in setup");
-  }else{
-    Serial.println("audio clip missing in setup");
-  }
+  //tmrpcm.setVolume(5);
+  tmrpcm.setVolume(5);
+  //tmrpcm.quality(0);
+  tmrpcm.play("1.wav");
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-
+  if(tmrpcm.isPlaying()){
+    Serial.println("playing"); 
+  }
 }
