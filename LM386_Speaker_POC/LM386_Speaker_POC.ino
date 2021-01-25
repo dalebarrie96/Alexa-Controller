@@ -22,22 +22,32 @@ void setup() {
   //music stuff
   tmrpcm.speakerPin = 9;
 
+  //fileStuff
   if (!SD.begin(SD_ChipSelectPin)) {
     Serial.println("SD fail");
     return;
   }else{
     Serial.println("SD Sucess");
   }
+  
+  randomSeed(analogRead(0));
 
-  //tmrpcm.setVolume(5);
   tmrpcm.setVolume(5);
-  //tmrpcm.quality(0);
-  tmrpcm.play("1.wav");
+  tmrpcm.quality(1);
+  
+  tmrpcm.play(generateFileName());
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
   if(tmrpcm.isPlaying()){
-    Serial.println("playing"); 
+    //Serial.println("playing"); 
   }
+}
+
+char generateFileName(){
+  String ext = String(".wav");
+  long fileNo = random(1, 6);
+  String filename = String(fileNo + ext);
+  return filename.c_str();
 }
