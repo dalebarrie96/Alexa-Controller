@@ -14,26 +14,25 @@
 const int chipSelect = 4;
 File file;
 
-//music setup 
+//WAV setup 
 TMRpcm tmrpcm; 
 
-//button stuff
+//Button Setup
 const int buttonPin = 2;
 int buttonState = 0;
 bool buttonPressed = false;
 
-//Timer Stuff
+//Timer Setup
 unsigned long lastCall;
 
 void setup() {
-  // put your setup code here, to run once:
   Serial.begin(9600);
   Serial.println("Arduino Speaker Test");
 
-  //music stuff
+  //Speaker data out pin
   tmrpcm.speakerPin = 9;
 
-  //fileStuff
+  //Micro SD card initialise checks
   if (!SD.begin(SD_ChipSelectPin)) {
     Serial.println("SD fail");
     return;
@@ -43,23 +42,23 @@ void setup() {
   
   randomSeed(analogRead(0));
 
+  //TMRpcm Property Setup
   tmrpcm.setVolume(5);
   tmrpcm.quality(1);
 
-  //button stuff
+  //Button pin setup
   pinMode(buttonPin, INPUT);
 
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  
+
   buttonState = digitalRead(buttonPin);
   
   // check if the pushbutton is pressed
   if (buttonState == HIGH) {
     
-    if(!buttonPressed){ //i have no idea why, but arduino doesnt like this inline with parent if
+    if(!buttonPressed){
       buttonPressed = true;
       Serial.println("Button Pressed");
 
@@ -77,6 +76,7 @@ void loop() {
   }
 }
 
+//Method to generate a filename (assuming it follows the correct naming convention)
 String generateFileName(){
   String ext = String(".wav");
   long fileNo = random(2, 7);
