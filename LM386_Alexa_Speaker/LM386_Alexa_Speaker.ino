@@ -25,6 +25,9 @@ bool buttonPressed = false;
 //Timer Setup
 unsigned long lastCall;
 
+//Last File No
+int lastNo;
+
 void setup() {
   Serial.begin(9600);
   Serial.println("Arduino Speaker Test");
@@ -39,9 +42,10 @@ void setup() {
   }else{
     Serial.println("SD Sucess");
   }
-  
-  randomSeed(analogRead(0));
 
+  //Random Song Setup
+  randomSeed(analogRead(0));
+  
   //TMRpcm Property Setup
   tmrpcm.setVolume(5);
   tmrpcm.quality(1);
@@ -79,8 +83,18 @@ void loop() {
 //Method to generate a filename (assuming it follows the correct naming convention)
 String generateFileName(){
   String ext = String(".wav");
-  long fileNo = random(2, 7);
-  String filename = String(fileNo + ext);
+  String filename = String(getNewRandomNumber() + ext);
   Serial.println("About to play - " + filename);
   return filename;
+}
+
+//Method to generate a new random number that isnt the same as the last one.
+int getNewRandomNumber(){
+  int fileNo;
+  do{
+    fileNo = random(2, 7);
+  }while(fileNo == lastNo);
+  
+  lastNo = fileNo;
+  return fileNo;
 }
