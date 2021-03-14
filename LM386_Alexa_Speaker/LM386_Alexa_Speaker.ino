@@ -6,9 +6,10 @@
 #define SD_ChipSelectPin 4
 #include <SPI.h>
 
-//two minutes in Milliseconds
-#define twoMins 120000
-
+//one minutes in Milliseconds
+#define oneMin 60000
+//5 seconds long hold
+#define fiveSecs 5000
 
 //file setup
 const int chipSelect = 4;
@@ -24,6 +25,7 @@ bool buttonPressed = false;
 
 //Timer Setup
 unsigned long lastCall;
+unsigned long buttonPressTimer;
 
 //Last File No
 int lastNo;
@@ -53,6 +55,9 @@ void setup() {
   //Button pin setup
   pinMode(buttonPin, INPUT);
 
+  //Builtin LED
+  pinMode(LED_BUILTIN, OUTPUT);
+
 }
 
 void loop() {
@@ -63,18 +68,24 @@ void loop() {
   if (buttonState == HIGH) {
     
     if(!buttonPressed){
+      buttonPressTimer = millis();
+      
       buttonPressed = true;
       Serial.println("Button Pressed");
-
-      unsigned long now = millis();
       
-      if(!tmrpcm.isPlaying() && (!lastCall || (now - lastCall >= twoMins))){
+      if(!tmrpcm.isPlaying() && (!lastCall || (millis() - lastCall >= oneMin))){
         tmrpcm.play(generateFileName().c_str());
         lastCall = millis();
       }else{
         Serial.println("Button pressed but play condirions not met");
       }
     }
+
+    if((millis() - buttonPressTimer > fiveSecs)){
+      buttonPressTimer = 0;
+      lastCall = 0;
+    }
+    
   }else{
     buttonPressed = false;
   }
